@@ -1,30 +1,23 @@
-void generateLFSR(const char *key, int key_len, unsigned int *a3, unsigned int *a4, unsigned int *a5)
+void generateLFSR(const char* key, int key_len, unsigned int* a3, unsigned int* a4, unsigned int* a5)
 {
-	int v7;
-	int v8;
-	char *v9;
-	char v11[65] = "";
+	char keySet[65] = "";
 
 	*a3 = 301989938;
 	*a4 = 623357073;
 	*a5 = -2004086252;
 
-	for (int i = 0; i < key_len; ++i)
+	for (int i = 0; i < key_len; ++i) // key * 2
 	{
-		v11[i] = key[i];
-		v11[key_len + i] = key[i];
+		keySet[i] = key[i];
+		keySet[key_len + i] = key[i];
 	}
 
-	v7 = 0;
-	while (1)
+
+	for(int i = 0; i < 4; ++i)
 	{
-		v8 = *a3;
-		if (v7 == 4)
-			break;
-		*a3 = v11[v7] | (v8 << 8);
-		v9 = &v11[v7++];
-		*a4 = v9[4] | (*a4 << 8);
-		*a5 = v9[8] | (*a5 << 8);
+		*a3 = keySet[i] | (*a3 << 8);
+		*a4 = keySet[4+i] | (*a4 << 8);
+		*a5 = keySet[8+i] | (*a5 << 8);
 	}
 }
 
