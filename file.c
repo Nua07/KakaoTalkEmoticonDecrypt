@@ -26,12 +26,6 @@ void generateLFSR(const char *key, int key_len, unsigned int *a3, unsigned int *
 		*a4 = v9[4] | (*a4 << 8);
 		*a5 = v9[8] | (*a5 << 8);
 	}
-	if (!v8)
-		*a3 = 301989938;
-	if (!*a4)
-		*a4 = 623357073;
-	if (!*a5)
-		*a5 = -2004086252;
 }
 
 int cryptByte(int byte, unsigned int *a, unsigned int *b, unsigned int *c)
