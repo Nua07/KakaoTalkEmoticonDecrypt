@@ -34,7 +34,7 @@ void generateLFSR(const char *key, int key_len, unsigned int *a3, unsigned int *
 		*a5 = -2004086252;
 }
 
-int cryptByte(int byte, unsigned int *a, unsigned int *b, unsigned int *c, int a5)
+int cryptByte(int byte, unsigned int *a, unsigned int *b, unsigned int *c)
 {
 	char flag1;
 	int result;
@@ -98,7 +98,7 @@ void decryptImage(char *buf)
 
 	for (int i = 0; i < 128; i++)
 	{
-		int r = cryptByte(*(buf + i), &a, &b, &c, 1);
+		int r = cryptByte(*(buf + i), &a, &b, &c);
 		*(buf + i) = r;
 	}
 }
