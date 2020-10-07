@@ -26,7 +26,7 @@ public class Decrypt {
     }
 
     public static int xorByte(int b, ArrayList<Integer> seq) {
-        char flag1=0;
+        char flag1=1;
         char flag2=0;
 
         int result=0;
