@@ -66,12 +66,12 @@ int cryptByte(int byte, unsigned int *seq)
 
 void decryptImage(char *buf)
 {
-	unsigned int *seq;
-	generateLFSR(&seq);
+	unsigned int seq[3];
+	generateLFSR(seq);
 
 	for (int i = 0; i < 128; i++)
 	{
-		int r = cryptByte(*(buf + i), &seq);
+		int r = cryptByte(*(buf + i), seq);
 		*(buf + i) = r;
 	}
 }
