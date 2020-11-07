@@ -1,71 +1,59 @@
-void generateLFSR(const char* key, int key_len, unsigned int* a3, unsigned int* a4, unsigned int* a5)
+void generateLFSR(unsigned int* seq)
 {
-	char keySet[65] = "";
+	char *key= (char*)"a271730728cbe141e47fd9d677e9006da271730728cbe141e47fd9d677e9006d";
 
-	*a3 = 301989938;
-	*a4 = 623357073;
-	*a5 = -2004086252;
-
-	for (int i = 0; i < key_len; ++i) // key * 2
-	{
-		keySet[i] = key[i];
-		keySet[key_len + i] = key[i];
-	}
-
-
+	seq[0] = 301989938;
+	seq[1] = 623357073;
+	seq[2] = -2004086252;
+	
 	for(int i = 0; i < 4; ++i)
 	{
-		*a3 = keySet[i] | (*a3 << 8);
-		*a4 = keySet[4+i] | (*a4 << 8);
-		*a5 = keySet[8+i] | (*a5 << 8);
+		seq[0] = key[i] | (seq[0] << 8);
+		seq[1] = key[4+i] | (seq[1] << 8);
+		seq[2] = key[8+i] | (seq[2] << 8);
 	}
 }
 
-int cryptByte(int byte, unsigned int *a, unsigned int *b, unsigned int *c)
+int cryptByte(int byte, unsigned int *seq)
 {
-	char flag1;
-	int result;
-	char flag2;
-	int v10;
-	int v11;
-	int v12;
-
-	flag1 = 1;
-	flag2 = 0;
-
-	result = 0;
+	char flag1=1;
+	char flag2=0;
+	int v10=0;
+	int v11=0;
+	int v12=0;
+	int result=0;
 
 	for (int i = 0; i < 8; i++)
 	{
-		v10 = *a >> 1;
-		if (*a << 31)
+		v10 = seq[0] >> 1;
+		if (seq[0] << 31)
 		{
-			*a = v10 ^ 0xC0000031;
-			v12 = *b >> 1;
-			if (*b << 31)
+			seq[0] = v10 ^ 0xC0000031;
+			v12 = seq[1] >> 1;
+			if (seq[1] << 31)
 			{
-				*b = (v12 | 0xC0000000) ^ 0x20000010;
+				seq[1] = (v12 | 0xC0000000) ^ 0x20000010;
 				flag1 = 1;
 			}
 			else
 			{
-				*b = v12 & 0x3FFFFFFF;
+				seq[1] = v12 & 0x3FFFFFFF;
 				flag1 = 0;
 			}
 		}
 		else
 		{
-			*a = v10;
-			v11 = *c >> 1;
-			if (*c << 31)
+			seq[0] = v10;
+			v11 = seq[2] >> 1;
+			if (seq[2] << 31)
 			{
-				*c = (v11 | 0xF0000000) ^ 0x8000001;
+				seq[2] = (v11 | 0xF0000000) ^ 0x8000001;
 				flag2 = 1;
 			}
 			else
 			{
 				flag2 = 0;
-				*c = v11 & 0xFFFFFFF;
+				seq[2] = v11 & 0xFFFFFFF;
 			}
 		}
 		result = flag1 ^ flag2 | 2 * result;
@@ -78,14 +66,12 @@ int cryptByte(int byte, unsigned int *a, unsigned int *b, unsigned int *c)
 
 void decryptImage(char *buf)
 {
-	unsigned int a;
-	unsigned int b;
-	unsigned int c;
-	generateLFSR("a271730728cbe141e47fd9d677e9006d", 32, &a, &b, &c);
+	unsigned int *seq;
+	generateLFSR(&seq);
 
 	for (int i = 0; i < 128; i++)
 	{
-		int r = cryptByte(*(buf + i), &a, &b, &c);
+		int r = cryptByte(*(buf + i), &seq);
 		*(buf + i) = r;
 	}
 }
