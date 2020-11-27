@@ -1,9 +1,3 @@
-import struct
-from ctypes import c_uint32
-
-def tc(num):
-    return (-1)*(255 + 1 - num)
-    
 def generateLFSR(key, seq):
     d = list(key*2)
 
